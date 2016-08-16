@@ -4,6 +4,7 @@ lib_env = Environment (
     WITH_MAMA_SOURCE = GetOption('with_mamasource'),
     WITH_MAMA        = GetOption('with_mamainstall'),
     WITH_GTEST       = GetOption('with_gtest'),
+    suffix           = '',
     LIBS     =  [
                     'mama',
                     'wombatcommon',
@@ -51,8 +52,8 @@ if not lib_env.GetOption('clean') and not lib_env.GetOption('help'):
         print 'Cannot find MAMA install directory - check --with-mamainstall'
         Exit(1)
 
-lib_env.SharedLibrary (
-    'mamaomnmmsgimpl',
+libs = lib_env.SharedLibrary (
+    'mamaomnmmsgimpl' + lib_env['suffix'],
     [
         'Field.cpp',
         'Iterator.cpp',
@@ -61,8 +62,8 @@ lib_env.SharedLibrary (
 )
 
 # Install the library and unit test files to the top directory
-lib_env.Command ("../libmamaomnmmsgimpl.so",
-                 'libmamaomnmmsgimpl.so',
+lib_env.Command ("../" + str(libs[0]),
+                 str(libs[0]),
                  [
                      Copy("$TARGET", "$SOURCE"),
                  ]
